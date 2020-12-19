@@ -1,0 +1,7 @@
+1. OffsetDateTime
+2. getDayOfWeek() and then subtract the correct number of days to find the date.
+3. ZoneId is an identifier to represent different zones. A ZoneOffset is an actual offset in time.
+4. toInstant()
+5. ChronoUnit.between() for the first of each month pair.
+6. I would use getDayOfWeek() to find the first Monday and then add 7 to that date until I'm out of that month.
+7. First check that the date is the 13th of the month, then use getDayOfWeek() to determine if it's Friday.
