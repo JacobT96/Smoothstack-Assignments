@@ -481,19 +481,30 @@ public class Service {
 	}
 	
 	private void addBook(Scanner sc) throws SQLException {
+		System.out.println("Enter or select 'quit' at any prompt to cancel the operation.");
 		System.out.println("Enter book title:");
 		String title = sc.nextLine();
+		if (title.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		List<Author> authors = authDAO.readAuthors();
 		
 		System.out.println("Pick an author:");
 		for (int i=0; i<authors.size(); i++) {
 			System.out.println(i+1 + ") " + authors.get(i).toString());
 		}
+		System.out.println(authors.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > authors.size());
+		} while (input < 1 || input > authors.size()+1);
+		
+		if (input == authors.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Author chosenAuthor = authors.get(input-1);
 		
@@ -503,11 +514,17 @@ public class Service {
 		for (int i=0; i<pubs.size(); i++) {
 			System.out.println(i+1 + ") " + pubs.get(i).toString());
 		}
+		System.out.println(pubs.size()+1 + ") Quit");
 		
 		input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > pubs.size());
+		} while (input < 1 || input > pubs.size()+1);
+		
+		if (input == pubs.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Publisher chosenPub = pubs.get(input-1);
 		
@@ -523,21 +540,34 @@ public class Service {
 	
 	private void updateBook(Scanner sc) throws SQLException {
 		List<Book> books = bookDAO.readBooks();
+		System.out.println("Enter or select 'quit' at any prompt to cancel the operation.");
 		System.out.println("Which book to update:");
 		for (int i=0; i<books.size(); i++) {
 			System.out.println(i+1 + ") " + books.get(i).toString());
 		}
+		System.out.println(books.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > books.size());
+		} while (input < 1 || input > books.size()+1);
+		
+		if (input == books.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Book chosenBook = books.get(input-1);
 		
 		String oldTitle = chosenBook.getTitle();
 		System.out.println("Enter a new title for " + oldTitle + ", or enter N/A to skip:");
 		String title = sc.nextLine();
+		
+		if (title.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!title.toLowerCase().equals("n/a")) {
 			chosenBook.setTitle(title);
 		}
@@ -551,11 +581,17 @@ public class Service {
 			System.out.println(i+1 + ") " + authors.get(i).getAuthorName());
 		}
 		System.out.println(last + ") N/A");
+		System.out.println(last+1 + ") Quit");
 		
 		input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > last);
+		} while (input < 1 || input > last+1);
+		
+		if (input == last+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		if (input != last) {
 			Author chosenAuthor = authors.get(input-1);
@@ -571,11 +607,17 @@ public class Service {
 			System.out.println(i+1 + ") " + pubs.get(i).getPublisherName());
 		}
 		System.out.println(last + ") N/A");
+		System.out.println(last+1 + ") Quit");
 		
 		input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > last);
+		} while (input < 1 || input > last+1);
+		
+		if (input == last+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		if (input != last) {
 			Publisher chosenPub = pubs.get(input-1);
@@ -590,15 +632,22 @@ public class Service {
 	
 	private void deleteBook(Scanner sc) throws SQLException {
 		List<Book> books = bookDAO.readBooks();
+		System.out.println("Select 'quit' to cancel the operation.");
 		System.out.println("Which book to delete:");
 		for (int i=0; i<books.size(); i++) {
 			System.out.println(i+1 + ") " + books.get(i).toString());
 		}
+		System.out.println(books.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > books.size());
+		} while (input < 1 || input > books.size()+1);
+		
+		if (input == books.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Book chosenBook = books.get(input-1);
 		bookDAO.deleteBook(chosenBook);
@@ -662,8 +711,15 @@ public class Service {
 	}
 
 	private void addAuthor(Scanner sc) throws SQLException {
+		System.out.println("Enter 'quit' to cancel the operation.");
 		System.out.println("Enter author name:");
 		String name = sc.nextLine();
+		
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		Author author = new Author();
 		author.setAuthorName(name);
 		authDAO.addAuthor(author);
@@ -674,20 +730,33 @@ public class Service {
 	
 	private void updateAuthor(Scanner sc) throws SQLException {
 		List<Author> authors = authDAO.readAuthors();
+		System.out.println("Enter or select 'quit' at any prompt to cancel the operation.");
 		System.out.println("Which author to update:");
 		for (int i=0; i<authors.size(); i++) {
 			System.out.println(i+1 + ") " + authors.get(i).toString());
 		}
+		System.out.println(authors.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > authors.size());
+		} while (input < 1 || input > authors.size()+1);
+		
+		if (input == authors.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Author chosenAuthor = authors.get(input-1);
 		String oldName = chosenAuthor.toString();
 		System.out.println("Enter a new name for " + oldName + ":");
 		String name = sc.nextLine();
+		
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		chosenAuthor.setAuthorName(name);
 		authDAO.updateAuthor(chosenAuthor);
 		System.out.println("Author " + oldName + " changed to " + name + ".");
@@ -697,15 +766,22 @@ public class Service {
 	
 	private void deleteAuthor(Scanner sc) throws SQLException {
 		List<Author> authors = authDAO.readAuthors();
+		System.out.println("Select 'quit' to cancel the operation.");
 		System.out.println("Which author to delete:");
 		for (int i=0; i<authors.size(); i++) {
 			System.out.println(i+1 + ") " + authors.get(i).toString());
 		}
+		System.out.println(authors.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > authors.size());
+		} while (input < 1 || input > authors.size()+1);
+		
+		if (input == authors.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Author chosenAuthor = authors.get(input-1);
 		authDAO.deleteAuthor(chosenAuthor);
@@ -770,12 +846,31 @@ public class Service {
 	}
 	
 	private void addPublisher(Scanner sc) throws SQLException {
+		System.out.println("Enter 'quit' at any prompt to cancel the operation.");
 		System.out.println("Enter publisher name:");
 		String name = sc.nextLine();
+		
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		System.out.println("Enter " + name + "'s address:");
 		String address = sc.nextLine();
+		
+		if (address.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		System.out.println("Enter " + name + "'s phone number:");
 		String phoneNumber = sc.nextLine();
+		
+		if (phoneNumber.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		Publisher publisher = new Publisher();
 		publisher.setPublisherName(name);
 		publisher.setPublisherAddress(address);
@@ -788,21 +883,34 @@ public class Service {
 	
 	private void updatePublisher(Scanner sc) throws SQLException {
 		List<Publisher> publishers = publisherDAO.readPublishers();
+		System.out.println("Enter or select 'quit' at any prompt to cancel the operation.");
 		System.out.println("Which publisher to update:");
 		for (int i=0; i<publishers.size(); i++) {
 			System.out.println(i+1 + ") " + publishers.get(i).toString());
 		}
+		System.out.println(publishers.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > publishers.size());
+		} while (input < 1 || input > publishers.size()+1);
+		
+		if (input == publishers.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Publisher p = publishers.get(input-1);
 		
 		String oldName = p.getPublisherName();
 		System.out.println("Enter a new name for " + oldName + ", or enter N/A to skip:");
 		String name = sc.nextLine();
+		
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!name.toLowerCase().equals("n/a")) {
 			p.setPublisherName(name);
 		}
@@ -810,6 +918,12 @@ public class Service {
 		System.out.println("Current address is " + p.getPublisherAddress());
 		System.out.println("Enter a new address, or enter N/A to skip:");
 		String address = sc.nextLine();
+		
+		if (address.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!address.toLowerCase().equals("n/a")) {
 			p.setPublisherAddress(address);
 		}
@@ -817,6 +931,12 @@ public class Service {
 		System.out.println("Current phone number is " + p.getPublisherPhone());
 		System.out.println("Enter a new phone number, or enter N/A to skip:");
 		String phone = sc.nextLine();
+		
+		if (phone.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!phone.toLowerCase().equals("n/a")) {
 			p.setPublisherPhone(phone);
 		}
@@ -829,15 +949,22 @@ public class Service {
 	
 	private void deletePublisher(Scanner sc) throws SQLException {
 		List<Publisher> publishers = publisherDAO.readPublishers();
+		System.out.println("Select 'quit' to cancel operation.");
 		System.out.println("Which publisher to delete:");
 		for (int i=0; i<publishers.size(); i++) {
 			System.out.println(i+1 + ") " + publishers.get(i).toString());
 		}
+		System.out.println(publishers.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > publishers.size());
+		} while (input < 1 || input > publishers.size()+1);
+		
+		if (input == publishers.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Publisher chosenPub = publishers.get(input-1);
 		publisherDAO.deletePublisher(chosenPub);
@@ -898,12 +1025,24 @@ public class Service {
 	}
 	
 	private void addBranch(Scanner sc) throws SQLException {
-		LibraryBranch branch = new LibraryBranch();
+		System.out.println("Enter 'quit' at any prompt to cancel the operation.");
+		
 		System.out.println("Enter branch name:");
 		String name = sc.nextLine();
-		branch.setBranchName(name);
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		System.out.println("Enter branch address:");
 		String address = sc.nextLine();
+		if (address.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
+		LibraryBranch branch = new LibraryBranch();
+		branch.setBranchName(name);
 		branch.setBranchAddress(address);
 		libraryDAO.addBranch(branch);
 		System.out.println("Library Branch " + name + " added.");
@@ -913,21 +1052,33 @@ public class Service {
 	
 	private void updateBranch(Scanner sc) throws SQLException {
 		List<LibraryBranch> branches = libraryDAO.readBranches();
+		System.out.println("Enter or select 'quit' at any prompt to cancel the operation.");
 		System.out.println("Which branch to update:");
 		for (int i=0; i<branches.size(); i++) {
 			System.out.println(i+1 + ") " + branches.get(i).toString());
 		}
+		System.out.println(branches.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > branches.size());
+		} while (input < 1 || input > branches.size()+1);
+		
+		if (input == branches.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		LibraryBranch chosenBranch = branches.get(input-1);
 		
 		String oldName = chosenBranch.getBranchName();
 		System.out.println("Enter a new name for " + oldName + ", or enter N/A to skip:");
 		String name = sc.nextLine();
+		
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		if (!name.toLowerCase().equals("n/a")) {
 			chosenBranch.setBranchName(name);
@@ -937,6 +1088,11 @@ public class Service {
 		System.out.println("Current address is " + oldAddress + ".");
 		System.out.println("Enter a new address, or enter N/A to skip:");
 		String address = sc.nextLine();
+		
+		if (address.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		if (!address.toLowerCase().equals("n/a")) {
 			chosenBranch.setBranchAddress(address);
@@ -950,15 +1106,22 @@ public class Service {
 	
 	private void deleteBranch(Scanner sc) throws SQLException {
 		List<LibraryBranch> branches = libraryDAO.readBranches();
+		System.out.println("Select 'quit' to cancel the operation.");
 		System.out.println("Which branch to delete:");
 		for (int i=0; i<branches.size(); i++) {
 			System.out.println(i+1 + ") " + branches.get(i).toString());
 		}
+		System.out.println(branches.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > branches.size());
+		} while (input < 1 || input > branches.size()+1);
+		
+		if (input == branches.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		LibraryBranch chosenBranch = branches.get(input-1);
 		libraryDAO.deleteBranch(chosenBranch);
@@ -1018,14 +1181,30 @@ public class Service {
 	}
 	
 	private void addBorrower(Scanner sc) throws SQLException {
-		Borrower borrower = new Borrower();
+		System.out.println("Enter 'quit' at any prompt to cancel the operation.");
+		
 		System.out.println("Enter borrower name:");
 		String name = sc.nextLine();
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		System.out.println("Enter borrower address:");
 		String address = sc.nextLine();
+		if (address.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		System.out.println("Enter borrower phone number:");
 		String number = sc.nextLine();
+		if (number.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
+		Borrower borrower = new Borrower();
 		borrower.setName(name);
 		borrower.setAddress(address);
 		borrower.setPhone(number);
@@ -1037,21 +1216,34 @@ public class Service {
 	
 	private void updateBorrower(Scanner sc) throws SQLException {
 		List<Borrower> borrowers = borrowerDAO.readBorrowers();
+		System.out.println("Enter or select 'quit' at any prompt to cancel the operation.");
 		System.out.println("Which borrower to update:");
 		for (int i=0; i<borrowers.size(); i++) {
 			System.out.println(i+1 + ") " + borrowers.get(i).toString());
 		}
+		System.out.println(borrowers.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > borrowers.size());
+		} while (input < 1 || input > borrowers.size()+1);
+		
+		if (input == borrowers.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Borrower chosenBorr = borrowers.get(input-1);
 		
 		String oldName = chosenBorr.getName();
 		System.out.println("Enter a new name for " + oldName + ", or enter N/A to skip:");
 		String name = sc.nextLine();
+		
+		if (name.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!name.toLowerCase().equals("n/a")) {
 			chosenBorr.setName(name);
 		}
@@ -1060,6 +1252,12 @@ public class Service {
 		System.out.println("Current address is " + oldAddress + ".");
 		System.out.println("Enter a new address, or enter N/A to skip:");
 		String address = sc.nextLine();
+		
+		if (address.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!address.toLowerCase().equals("n/a")) {
 			chosenBorr.setAddress(address);
 		}
@@ -1068,6 +1266,12 @@ public class Service {
 		System.out.println("Current phone number is " + oldPhone + ".");
 		System.out.println("Enter a new phone number, or enter N/A to skip:");
 		String number = sc.nextLine();
+		
+		if (number.toLowerCase().equals("quit")) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+		
 		if (!number.toLowerCase().equals("n/a")) {
 			chosenBorr.setPhone(number);
 		}
@@ -1080,15 +1284,22 @@ public class Service {
 	
 	private void deleteBorrower(Scanner sc) throws SQLException {
 		List<Borrower> borrowers = borrowerDAO.readBorrowers();
+		System.out.println("Select 'quit' to cancel the operation.");
 		System.out.println("Which borrower to delete:");
 		for (int i=0; i<borrowers.size(); i++) {
 			System.out.println(i+1 + ") " + borrowers.get(i).toString());
 		}
+		System.out.println(borrowers.size()+1 + ") Quit");
 		
 		int input = 0;
 		do {
 			input = Integer.parseInt(sc.nextLine());
-		} while (input < 1 || input > borrowers.size());
+		} while (input < 1 || input > borrowers.size()+1);
+		
+		if (input == borrowers.size()+1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
 		
 		Borrower chosenBorr = borrowers.get(input-1);
 		borrowerDAO.deleteBorrower(chosenBorr);
