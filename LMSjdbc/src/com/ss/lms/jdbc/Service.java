@@ -1113,13 +1113,51 @@ public class Service {
 	public int overrideLoan(Scanner sc) {
 		try {
 			List<BookLoans> loans = loansDAO.readLoans();
-			for (BookLoans loan : loans) {
-				System.out.println(loan.toString());
+			System.out.println("Select an active loan:");
+			for (int i=0; i<loans.size(); i++) {
+				BookLoans loan = loans.get(i);
+				Borrower borrower = borrowerDAO.readBorrowersByCardNo(loan.getCardNo()).get(0);
+				Book book = bookDAO.readBooksById(loan.getBookId()).get(0);
+				LibraryBranch branch = libraryDAO.readBranchesById(loan.getBranchId()).get(0);
+				LocalDateTime dateOut = loan.getDateOut();
+				LocalDateTime dueDate = loan.getDueDate();
+				System.out.println(i+1 + ")");
+				System.out.println("Borrower: " + borrower.toString());
+				System.out.println("Book: " + book.toString());
+				System.out.println("Branch: " + branch.toString());
+				System.out.println("Checked out: " + dateOut);
+				System.out.println("Due: " + dueDate);
+				System.out.println("-------------");
+			}
+			System.out.println(loans.size()+1 + ") Cancel");
+			
+			int input = 0;
+			do {
+				input = Integer.parseInt(sc.nextLine());
+			} while (input < 1 || input > loans.size()+1);
+			
+			if (input != loans.size()+1) {
+				BookLoans chosenLoan = loans.get(input-1);
+				System.out.println("Enter the new year:");
+				int year = Integer.parseInt(sc.nextLine());
+				System.out.println("Enter the new month:");
+				int month = Integer.parseInt(sc.nextLine());
+				System.out.println("Enter the new day:");
+				int day = Integer.parseInt(sc.nextLine());
+				LocalDateTime newDueDate = LocalDateTime.of(year, month, day, 0, 0);
+				chosenLoan.setDueDate(newDueDate);
+				loansDAO.updateLoan(chosenLoan);
+				System.out.println("Due date changed to " + newDueDate);
+				System.out.println("Press enter to continue...");
+				sc.nextLine();
+				return admin1(sc);
 			}
 			
+			System.out.println("Operation cancelled.");
+			return admin1(sc);
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Error accessing due date.");
 		}
 		
 		return 0;

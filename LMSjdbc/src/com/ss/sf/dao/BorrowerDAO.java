@@ -31,6 +31,10 @@ public class BorrowerDAO extends BaseDAO<Borrower> {
 		return read("select * from tbl_borrower", null);
 	}
 	
+	public List<Borrower> readBorrowersByCardNo(int cardNo) throws SQLException {
+		return read("select * from tbl_borrower where cardNo = ?", new Object[] {cardNo});
+	}
+	
 	@Override
 	List<Borrower> extractData(ResultSet rs) throws SQLException {
 		List<Borrower> borrowers = new ArrayList<>();
