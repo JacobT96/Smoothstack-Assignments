@@ -32,29 +32,45 @@ public class Service {
 		bcDAO = new BookCopiesDAO();
 		loansDAO = new BookLoansDAO();
 	}
+	
+	// Handle exceptions when user input needs to be an int.
+	private int getIntInput(Scanner sc) {
+		int input = 0;
+		try {
+			input = Integer.parseInt(sc.nextLine());
+		}
+		catch (NumberFormatException e) {
+			input = 0;
+		}
+		return input;
+	}
 
 	public int mainmenu(Scanner sc) {
-		int input = 0;
-		System.out.println("Welcome to the SS Library Management System. Which category of user are you");
-		do {
-			System.out.println("1) Librarian");
-			System.out.println("2) Administrator");
-			System.out.println("3) Borrower");
-			input = Integer.parseInt(sc.nextLine());
-		} while (input != 1 && input != 2 && input != 3);
-		
-		switch (input) {
-		case 1:
-			//librarian
-			return lib1(sc);
-		case 2:
-			//administrator
-			return admin1(sc);
-		case 3:
-			//borrower
-			return takeCardNo(sc);
-		default:
-			return 0;
+		while (true) {
+			int input = 0;
+			System.out.println("Welcome to the SS Library Management System. Which category of user are you");
+			do {
+				System.out.println("1) Librarian");
+				System.out.println("2) Administrator");
+				System.out.println("3) Borrower");
+				input = getIntInput(sc);
+			} while (input != 1 && input != 2 && input != 3);
+			switch (input) {
+			case 1:
+				//librarian
+				lib1(sc);
+				break;
+			case 2:
+				//administrator
+				admin1(sc);
+				break;
+			case 3:
+				//borrower
+				takeCardNo(sc);
+				break;
+			default:
+				return 0;
+			}
 		}
 	}
 	
@@ -63,14 +79,14 @@ public class Service {
 		do {
 			System.out.println("1) Enter Branch you manage");
 			System.out.println("2) Quit to previous");
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input != 1 && input != 2);
 		
 		switch (input) {
 		case 1:
 			return lib2(sc);
 		case 2:
-			return mainmenu(sc);
+			return 0; //main menu
 		default:
 			return 0;
 		}
@@ -78,8 +94,8 @@ public class Service {
 	
 	public int lib2(Scanner sc) {
 		try {
-			System.out.println("Enter the Branch you manage:");
 			List<LibraryBranch> branches = libraryDAO.readBranches();
+			System.out.println("Enter the Branch you manage:");
 			for (int i=0; i<branches.size(); i++) {
 				System.out.println(i+1 + ") " + branches.get(i));
 			}
@@ -87,7 +103,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > branches.size()+1);
 			
 			if (input == branches.size() + 1) {
@@ -111,7 +127,7 @@ public class Service {
 			System.out.println("1) Update the details of the Library");
 			System.out.println("2) Add copies of Book to the Branch");
 			System.out.println("3) Quit to previous");
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input != 1 && input != 2 && input != 3);
 		
 		switch (input) {
@@ -176,7 +192,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > books.size()+1);
 			
 			if (input == books.size()+1) {
@@ -201,7 +217,7 @@ public class Service {
 			
 			System.out.println("Existing number of copies: " + num);
 			System.out.println("\nEnter new number of copies:");
-			int newnum = Integer.parseInt(sc.nextLine());
+			int newnum = getIntInput(sc);
 			copy.setNoOfCopies(newnum);
 			
 			if (num == 0) {
@@ -232,7 +248,7 @@ public class Service {
 			int input = -1;
 			do {
 				System.out.println("Enter your Card Number:");
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (!cards.contains(input));
 			
 			return borr1(input, sc);
@@ -251,7 +267,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input != 1 && input != 2 && input != 3);
 		
 		switch (input) {
@@ -260,7 +276,7 @@ public class Service {
 		case 2:
 			return borr4(cardNo, sc);
 		case 3:
-			return mainmenu(sc);
+			return 0; //mainmenu
 		default:
 			return 0;
 		}
@@ -278,7 +294,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > branches.size()+1);
 			
 			if (input == branches.size()+1) {
@@ -308,7 +324,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > availableBooks.size()+1);
 			
 			if (input == availableBooks.size()+1) {
@@ -355,7 +371,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > branches.size()+1);
 			
 			if (input == branches.size()+1) {
@@ -388,7 +404,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > books.size()+1);
 			
 			if (input == books.size()+1) {
@@ -418,7 +434,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > 7);
 		
 		switch (input) {
@@ -435,7 +451,7 @@ public class Service {
 		case 6:
 			return overrideLoan(sc);
 		case 7:
-			return mainmenu(sc);
+			return 0; //mainmenu
 		default:
 			return 0;
 		}
@@ -451,7 +467,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > 5);
 			
 			try {
@@ -498,7 +514,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > authors.size()+1);
 		
 		if (input == authors.size()+1) {
@@ -518,7 +534,7 @@ public class Service {
 		
 		input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > pubs.size()+1);
 		
 		if (input == pubs.size()+1) {
@@ -549,7 +565,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > books.size()+1);
 		
 		if (input == books.size()+1) {
@@ -585,7 +601,7 @@ public class Service {
 		
 		input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > last+1);
 		
 		if (input == last+1) {
@@ -611,7 +627,7 @@ public class Service {
 		
 		input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > last+1);
 		
 		if (input == last+1) {
@@ -641,7 +657,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > books.size()+1);
 		
 		if (input == books.size()+1) {
@@ -681,7 +697,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > 5);
 			
 			try {
@@ -739,7 +755,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > authors.size()+1);
 		
 		if (input == authors.size()+1) {
@@ -775,7 +791,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > authors.size()+1);
 		
 		if (input == authors.size()+1) {
@@ -816,7 +832,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > 5);
 			
 			try {
@@ -892,7 +908,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > publishers.size()+1);
 		
 		if (input == publishers.size()+1) {
@@ -958,7 +974,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > publishers.size()+1);
 		
 		if (input == publishers.size()+1) {
@@ -995,7 +1011,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > 5);
 			
 			try {
@@ -1061,7 +1077,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > branches.size()+1);
 		
 		if (input == branches.size()+1) {
@@ -1115,7 +1131,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > branches.size()+1);
 		
 		if (input == branches.size()+1) {
@@ -1151,7 +1167,7 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > 5);
 			
 			try {
@@ -1225,7 +1241,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > borrowers.size()+1);
 		
 		if (input == borrowers.size()+1) {
@@ -1293,7 +1309,7 @@ public class Service {
 		
 		int input = 0;
 		do {
-			input = Integer.parseInt(sc.nextLine());
+			input = getIntInput(sc);
 		} while (input < 1 || input > borrowers.size()+1);
 		
 		if (input == borrowers.size()+1) {
@@ -1344,17 +1360,17 @@ public class Service {
 			
 			int input = 0;
 			do {
-				input = Integer.parseInt(sc.nextLine());
+				input = getIntInput(sc);
 			} while (input < 1 || input > loans.size()+1);
 			
 			if (input != loans.size()+1) {
 				BookLoans chosenLoan = loans.get(input-1);
 				System.out.println("Enter the new year:");
-				int year = Integer.parseInt(sc.nextLine());
-				System.out.println("Enter the new month:");
-				int month = Integer.parseInt(sc.nextLine());
-				System.out.println("Enter the new day:");
-				int day = Integer.parseInt(sc.nextLine());
+				int year = getIntInput(sc);
+				System.out.println("Enter the new month (1-12):");
+				int month = getIntInput(sc);
+				System.out.println("Enter the new day (1-31):");
+				int day = getIntInput(sc);
 				LocalDateTime newDueDate = LocalDateTime.of(year, month, day, 0, 0);
 				chosenLoan.setDueDate(newDueDate);
 				loansDAO.updateLoan(chosenLoan);
